@@ -1,19 +1,25 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+// Adiciona os serviços do Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Adiciona o serviço SignalR
 builder.Services.AddSignalR();
 
+// Configura a política de CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyCorsPolicy",
         policy =>
         {
-            policy.WithOrigins("https://gabrielpawlo.github.io/chat-realtime") // CORREÇÃO AQUI
+            // O domínio do seu site no GitHub Pages
+            policy.WithOrigins("https://gabrielpawlo.github.io/chat-realtime")
                   .AllowAnyHeader()
-                  .AllowAnyMethod();
+                  .AllowAnyMethod()
+                  .AllowCredentials(); // Isso é crucial para o SignalR
         });
 });
 
@@ -28,6 +34,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseRouting();
+
+// Usa a política de CORS
 app.UseCors("MyCorsPolicy");
 
 app.MapControllers();

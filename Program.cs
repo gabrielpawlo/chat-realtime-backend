@@ -3,15 +3,15 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adiciona os serviços essenciais
+//adiciona os serviços essenciais
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Adiciona o serviço SignalR
+//adiciona o serviço SignalR
 builder.Services.AddSignalR();
 
-// Configura a política de CORS
+//configura a política de CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyCorsPolicy",
@@ -23,13 +23,13 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Adiciona o DbContext e a string de conexão do MySQL (movido para antes do builder.Build())
+//adiciona o DbContext e a string de conexão do MySQL (movido para antes do builder.Build())
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChatDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 var app = builder.Build();
 
-// Configura o pipeline HTTP
+//configura o pipeline HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -43,11 +43,11 @@ app.UseCors("MyCorsPolicy");
 
 app.UseAuthorization();
 
-// Mapeia os endpoints (Controllers e Hubs)
+//mapeia os endpoints (Controllers e Hubs)
 app.MapControllers();
 app.MapHub<ChatApp.Hubs.ChatHub>("/chatHub");
 
-// Configura o uso de arquivos estáticos (movido para antes do roteamento)
+//configura o uso de arquivos estáticos (movido para antes do roteamento)
 app.UseDefaultFiles();
 app.UseStaticFiles();
 

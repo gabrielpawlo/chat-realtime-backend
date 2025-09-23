@@ -21,12 +21,12 @@ function addMessage(message) {
 }
 
 // Lógica de conexão e mensagens
-connection.on("ReceiveMessageHistory", (messages) => {
-    messages.forEach(msg => addMessage(msg)); // Passa o objeto completo
+connection.on("ReceiveMessage", (message) => {
+    addMessage(message); // message já é { user, text, timestamp }
 });
 
-connection.on("ReceiveMessage", (message) => {
-    addMessage(message); // Passa o objeto completo
+connection.on("ReceiveMessageHistory", (messages) => {
+    messages.forEach(msg => addMessage(msg));
 });
 
 joinButton.addEventListener('click', () => {

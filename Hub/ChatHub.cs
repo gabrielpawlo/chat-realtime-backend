@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using ChatApp.Data;
 using ChatApp.Models;
-using Microsoft.EntityFrameworkCore; // Importante para usar ToListAsync()
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatApp.Hubs
 {
@@ -9,7 +9,7 @@ namespace ChatApp.Hubs
     {
         private readonly ChatDbContext _dbContext;
 
-        public ChatHub(ChatDbContext dbContext) // Injeção de dependência do banco de dados
+        public ChatHub(ChatDbContext dbContext)
         {
             _dbContext = dbContext;
         }

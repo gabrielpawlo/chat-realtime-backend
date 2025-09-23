@@ -16,12 +16,10 @@ namespace ChatApp.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            // Exemplo: carregar mensagens do banco ou lista em memória
-            var history = new List<object>
-            {
-                new { user = "System", text = "Welcome to the chat!" }
-            };
-            await Clients.Caller.SendAsync("ReceiveMessageHistory", history);
+            // CORRIGIDO: Carrega todas as mensagens do banco de dados
+            var messages = await _dbContext.Messages.OrderBy(m => m.Timestamp).ToListAsync();
+            await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
+
             await base.OnConnectedAsync();
         }
 

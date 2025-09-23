@@ -1,0 +1,17 @@
+# Visual Studio Temporary Files
+.vs/
+*.vsidx
+*.vspscc
+
+# Build folders
+[Bb]in/
+[Oo]bj/
+
+# Packages and dependencies
+packages/
+
+# Log files
+*.log
+
+# User-specific files
+.vscode/

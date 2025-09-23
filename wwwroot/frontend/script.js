@@ -12,21 +12,21 @@ const messagesList = document.getElementById('messagesList');
 
 let username = "";
 
-// Função para exibir a mensagem na tela
-function addMessage(user, message) {
+// ALTERADO: Agora a função recebe um objeto de mensagem
+function addMessage(message) {
     const li = document.createElement("li");
-    li.textContent = `${user}: ${message}`;
+    li.textContent = `${message.user}: ${message.text}`;
     messagesList.appendChild(li);
-    messagesList.scrollTop = messagesList.scrollHeight; // Rola para o final
+    messagesList.scrollTop = messagesList.scrollHeight;
 }
 
+// Lógica de conexão e mensagens
 connection.on("ReceiveMessageHistory", (messages) => {
-    messages.forEach(msg => addMessage(msg.user, msg.text));
+    messages.forEach(msg => addMessage(msg)); // Passa o objeto completo
 });
 
-// Lógica de conexão e mensagens
 connection.on("ReceiveMessage", (message) => {
-    addMessage(message.user, message.text);
+    addMessage(message); // Passa o objeto completo
 });
 
 joinButton.addEventListener('click', () => {
@@ -50,11 +50,8 @@ function sendMessage() {
 
 sendButton.addEventListener("click", sendMessage);
 
-// Permite enviar mensagem ao apertar Enter
 messageInput.addEventListener("keypress", (e) => {
     if (e.key === 'Enter') {
         sendMessage();
     }
 });
-
-console.log("Chat Frontend Carregado.");

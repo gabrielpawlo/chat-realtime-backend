@@ -16,7 +16,7 @@ namespace ChatApp.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            // CORRIGIDO: Carrega todas as mensagens do banco de dados
+            // CORRIGIDO: Carrega todas as mensagens do banco de dados, ordenadas por data
             var messages = await _dbContext.Messages.OrderBy(m => m.Timestamp).ToListAsync();
             await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
 

@@ -17,7 +17,7 @@ namespace ChatApp.Hubs
         public override async Task OnConnectedAsync()
         {
             var messages = await _dbContext.Messages.OrderBy(m => m.Timestamp).ToListAsync();
-            await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
+            await Clients.All.SendAsync("ReceiveMessage", message.User, message.Text, message.Timestamp);
 
             await base.OnConnectedAsync();
         }

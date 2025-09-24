@@ -1,35 +1,30 @@
-using ChatApp.Data;
-using Microsoft.EntityFrameworkCore;
-
 var builder = WebApplication.CreateBuilder(args);
 
-//adiciona os serviços essenciais
 builder.Services.AddControllers();
+
+// Adiciona os serviços do Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//adiciona o serviço SignalR
+// Adiciona o serviço SignalR
 builder.Services.AddSignalR();
 
-//configura a política de CORS
+// Configura a política de CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyCorsPolicy",
         policy =>
         {
-            policy.AllowAnyOrigin()
+            // O domínio do seu site no GitHub Pages
+            policy.WithOrigins("https://gabrielpawlo.github.io/chat-realtime")
                   .AllowAnyHeader()
-                  .AllowAnyMethod();
+                  .AllowAnyMethod()
+                  .AllowCredentials(); // Isso é crucial para o SignalR
         });
 });
 
-//adiciona o DbContext e a string de conexão do MySQL (movido para antes do builder.Build())
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ChatDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-
 var app = builder.Build();
 
-//configura o pipeline HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -37,17 +32,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthorization();
 app.UseRouting();
 
+// Usa a política de CORS
 app.UseCors("MyCorsPolicy");
 
-app.UseAuthorization();
-
-//mapeia os endpoints (Controllers e Hubs)
 app.MapControllers();
 app.MapHub<ChatApp.Hubs.ChatHub>("/chatHub");
 
-//configura o uso de arquivos estáticos (movido para antes do roteamento)
 app.UseDefaultFiles();
 app.UseStaticFiles();
 

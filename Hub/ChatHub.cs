@@ -16,7 +16,6 @@ namespace ChatApp.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            // CORRIGIDO: Carrega todas as mensagens do banco de dados, ordenadas por data
             var messages = await _dbContext.Messages.OrderBy(m => m.Timestamp).ToListAsync();
             await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
 
@@ -32,11 +31,9 @@ namespace ChatApp.Hubs
                 Timestamp = DateTime.Now
             };
 
-            // Salva a mensagem no banco de dados
             _dbContext.Messages.Add(message);
             await _dbContext.SaveChangesAsync();
 
-            // Envia a mensagem para todos os clientes, incluindo o remetente
             await Clients.All.SendAsync("ReceiveMessage", message);
         }
     }

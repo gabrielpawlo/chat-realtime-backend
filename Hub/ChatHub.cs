@@ -37,6 +37,5 @@ namespace ChatApp.Hubs
             // CORRIGIDO: Agora envia o objeto completo da mensagem
             await Clients.All.SendAsync("ReceiveMessage", message);
         }
-
     }
 }

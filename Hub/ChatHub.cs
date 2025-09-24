@@ -16,11 +16,7 @@ namespace ChatApp.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            var messages = await _dbContext.Messages
-                                           .OrderBy(m => m.Timestamp)
-                                           .ToListAsync();
-
-            // Envia o histórico apenas para o usuário que acabou de entrar
+            var messages = await _dbContext.Messages.OrderBy(m => m.Timestamp).ToListAsync();
             await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
 
             await base.OnConnectedAsync();
@@ -38,8 +34,8 @@ namespace ChatApp.Hubs
             _dbContext.Messages.Add(message);
             await _dbContext.SaveChangesAsync();
 
-            // Envia só os dados relevantes para todos os clientes
-            await Clients.All.SendAsync("ReceiveMessage", message.User, message.Text, message.Timestamp);
+            // CORRIGIDO: Agora envia o objeto completo da mensagem
+            await Clients.All.SendAsync("ReceiveMessage", message);
         }
 
     }

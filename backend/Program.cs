@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyCorsPolicy", policy =>
     {
-        policy.WithOrigins("https://gabrielpawlo.github.io/chat-realtime") // se for rodar o site em uma subpasta, use ex: "https://gabrielpawlo.github.io/chat-realtime"
+        policy.WithOrigins("https://gabrielpawlo.github.io") // se for rodar o site em uma subpasta, use ex: "https://gabrielpawlo.github.io/chat-realtime"
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -41,11 +41,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.UseRouting();
+app.UseCors("MyCorsPolicy"); // TEM que vir logo depois do UseRouting
+app.UseAuthorization();
 
-// CORS precisa vir antes dos endpoints
-app.UseCors("MyCorsPolicy");
 
 app.MapControllers();
 app.MapHub<ChatApp.Hubs.ChatHub>("/chatHub");

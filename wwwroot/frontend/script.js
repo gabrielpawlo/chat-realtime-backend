@@ -1,5 +1,5 @@
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("https://chat-realtime-backend-yu50.onrender.com/chatHub") // 🔗 sua API backend
+    .withUrl("https://chat-realtime-backend-yu5o.onrender.com/chatHub") // 🔗 sua API backend
     .configureLogging(signalR.LogLevel.Information)
     .build();
 

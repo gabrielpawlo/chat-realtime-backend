@@ -1,9 +1,10 @@
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("https://chat-realtime-backend-yu5o.onrender.com/chatHub") // 🔗 sua API backend
+    .withUrl("https://chat-realtime-backend-yu50.onrender.com/chatHub") // 🔗 sua API backend
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
-let username = "";
+// Nome do usuário fixo (pode trocar por prompt se quiser)
+let username = "Usuário";
 
 // Quando receber mensagem do servidor
 connection.on("ReceiveMessage", (user, message, timestamp) => {
@@ -49,22 +50,12 @@ async function start() {
 
 start();
 
-// Login
-document.getElementById("loginBtn").addEventListener("click", () => {
-    const inputName = document.getElementById("username").value.trim();
-    if (inputName !== "") {
-        username = inputName;
-        document.getElementById("login-screen").classList.add("hidden");
-        document.getElementById("chat-screen").classList.remove("hidden");
-    }
-});
-
 // Enviar mensagem
 document.getElementById("sendButton").addEventListener("click", async (event) => {
     event.preventDefault();
 
     const message = document.getElementById("messageInput").value.trim();
-    if (message === "" || !username) return;
+    if (message === "") return;
 
     try {
         await connection.invoke("SendMessage", username, message);

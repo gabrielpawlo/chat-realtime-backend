@@ -1,41 +1,29 @@
 using Microsoft.AspNetCore.SignalR;
-using ChatApp.Data; // ADICIONADO
-using ChatApp.Models; // ADICIONADO
-using Microsoft.EntityFrameworkCore; // ADICIONADO
 
 namespace ChatApp.Hubs
 {
     public class ChatHub : Hub
     {
-        private readonly ChatDbContext _dbContext;
-
-        public ChatHub(ChatDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        // Lista estática para armazenar as mensagens em memória
+        private static List<(string User, string Text, DateTime Timestamp)> _messages
+            = new List<(string, string, DateTime)>();
 
         public override async Task OnConnectedAsync()
         {
-            var messages = await _dbContext.Messages.OrderBy(m => m.Timestamp).ToListAsync();
-            await Clients.Caller.SendAsync("ReceiveMessageHistory", messages);
-
+            // Envia o histórico apenas para o cliente que acabou de se conectar
+            await Clients.Caller.SendAsync("ReceiveMessageHistory", _messages);
             await base.OnConnectedAsync();
         }
 
         public async Task SendMessage(string user, string text)
         {
-            var message = new Message
-            {
-                User = user,
-                Text = text,
-                Timestamp = DateTime.Now
-            };
+            var message = (User: user, Text: text, Timestamp: DateTime.Now);
 
-            _dbContext.Messages.Add(message);
-            await _dbContext.SaveChangesAsync();
+            // Salva em memória
+            _messages.Add(message);
 
-            await Clients.All.SendAsync("ReceiveMessage", message);
+            // Envia para todos os clientes conectados
+            await Clients.All.SendAsync("ReceiveMessage", message.User, message.Text, message.Timestamp);
         }
-
     }
 }

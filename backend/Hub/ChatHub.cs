@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
-using ChatApp.Data;
-using ChatApp.Models;
-using Microsoft.EntityFrameworkCore;
+using ChatApp.Data; // ADICIONADO
+using ChatApp.Models; // ADICIONADO
+using Microsoft.EntityFrameworkCore; // ADICIONADO
 
 namespace ChatApp.Hubs
 {
@@ -34,7 +34,6 @@ namespace ChatApp.Hubs
             _dbContext.Messages.Add(message);
             await _dbContext.SaveChangesAsync();
 
-            // CORRIGIDO: Agora envia o objeto completo da mensagem
             await Clients.All.SendAsync("ReceiveMessage", message);
         }
 

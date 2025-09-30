@@ -68,7 +68,7 @@ You can access the project together with the frontend here:
 
 - The frontend must point to the SignalR endpoint (e.g., `http://localhost:5000/chatHub` or your deployed backend URL).  
 - Ensure that CORS is properly configured to allow requests from the frontend’s domain.  
-- Official frontend of this project: [https://gabrielpawlo.github.io/chat-realtime-frontend/](https://gabrielpawlo.github.io/chat-realtime-frontend/)
+- Official frontend of this project: [https://github.com/gabrielpawlo/chat-realtime-frontend](https://github.com/gabrielpawlo/chat-realtime-frontend)
 
 ---
 

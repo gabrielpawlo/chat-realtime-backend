@@ -1,5 +1,5 @@
 using ChatApp.Hubs;
-using ChatApp.Data; // precisa disso
+using ChatApp.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,10 +8,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// SignalR
+// adicionando signalR
 builder.Services.AddSignalR();
 
-// CORS
+// politica de cors para permissao
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyCorsPolicy", policy =>
@@ -23,11 +23,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-// MySQL
+//EM ANDAMENTO - adicionando MySQL
 builder.Services.AddDbContext<ChatDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0, 43)) // sua versão do MySQL
+        new MySqlServerVersion(new Version(8, 0, 43))
     )
 );
 
@@ -41,7 +41,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseRouting(); // <-- vem antes
+app.UseRouting();
 
 app.UseCors("MyCorsPolicy");
 
